@@ -8,6 +8,7 @@
 
 #include "ClipCheck_Windows.h"
 #include "ClipMove.h"
+#include "Detect.h"
 
 using namespace std;
 using namespace filesystem;
@@ -32,7 +33,9 @@ ClipCheck::~ClipCheck(){
 }
 
 void ClipCheck::watch(){
+    Detect detect;
     char buffer[1024];
+    // windows unsigned 32 bit int
     DWORD bytesReturned;
 
     while (true){
@@ -64,11 +67,12 @@ void ClipCheck::watch(){
 
                 if (filePath.extension() == L".mp4" || filePath.extension() == L".mov"){
                     // waits until it's done writing then moves
-                    cout << filePath << endl;
-
+                    
                     if (ifReady(filePath)){
-                        ClipMove mover(filePath, destinationFolder);
+                        ClipMove mover(filePath, destinationFolder, detect.getProcessName());
                         mover.moveClip();
+                        // couts the path
+                        cout << detect.getForegroundProcess() << endl;
                     }
                 }
             }
@@ -105,7 +109,7 @@ bool ClipCheck::ifReady(const path& filePath){
 
         // make sure the file is ready to be moved
         try {
-            uintmax_t curSize = file_size(filePath);
+            curSize = file_size(filePath);
         } catch (const filesystem_error&){
             count = 0;
             this_thread::sleep_for(chrono::milliseconds(100));

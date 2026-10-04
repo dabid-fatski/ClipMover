@@ -10,9 +10,11 @@ class ClipMove{
     private:
         path destinationFolder;
         path clipPath;
+        string clipName;
 
     public:
-        ClipMove(path clip, path destination);
-        
+        ClipMove(path clip, path destination, string name);
+        ~ClipMove();
+
         void moveClip();
 };
