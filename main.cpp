@@ -14,7 +14,6 @@ using namespace filesystem;
 
 int main(){
 
-    // i want to make it so it sorts it but idk if its worth the time to figure that out
     Config config;
 
     ClipCheck program(config.getObsFolder(), config.getDestinationFolder());
